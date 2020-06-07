@@ -20,20 +20,22 @@
     var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="本文记录个人博客的搭建过程及过程中遇到的问题 搭建过程本博客的搭建基于Hexo+Github，主要参考了以下专栏和博客进行搭建：">
+  <meta name="description" content="引言《Java虚拟机学习笔记》系列整理了Java虚拟机的相关基础知识。这是本系列的第一篇，介绍Java内存区域的划分。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="一时兴起，搭个博客">
-<meta property="og:url" content="http://yoursite.com/2020/06/01/Build-My-Blog/index.html">
+<meta property="og:title" content="Java虚拟机学习笔记（一）：Java内存区域">
+<meta property="og:url" content="http://yoursite.com/2020/06/07/JVM1-Memory/index.html">
 <meta property="og:site_name" content="Q&#39;s Blog">
-<meta property="og:description" content="本文记录个人博客的搭建过程及过程中遇到的问题 搭建过程本博客的搭建基于Hexo+Github，主要参考了以下专栏和博客进行搭建：">
+<meta property="og:description" content="引言《Java虚拟机学习笔记》系列整理了Java虚拟机的相关基础知识。这是本系列的第一篇，介绍Java内存区域的划分。">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2020-06-01T13:43:46.000Z">
-<meta property="article:modified_time" content="2020-06-02T01:30:44.276Z">
+<meta property="og:image" content="http://yoursite.com/images/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA.jpg">
+<meta property="article:published_time" content="2020-06-07T13:18:13.000Z">
+<meta property="article:modified_time" content="2020-06-07T13:31:20.346Z">
 <meta property="article:author" content="qhybupt">
-<meta property="article:tag" content="博客搭建">
+<meta property="article:tag" content="JVM">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/images/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA.jpg">
 
-<link rel="canonical" href="http://yoursite.com/2020/06/01/Build-My-Blog/">
+<link rel="canonical" href="http://yoursite.com/2020/06/07/JVM1-Memory/">
 
 
 <script id="page-configurations">
@@ -46,7 +48,7 @@
   };
 </script>
 
-  <title>一时兴起，搭个博客 | Q's Blog</title>
+  <title>Java虚拟机学习笔记（一）：Java内存区域 | Q's Blog</title>
   
 
 
@@ -157,7 +159,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/01/Build-My-Blog/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/07/JVM1-Memory/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -170,7 +172,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          一时兴起，搭个博客
+          Java虚拟机学习笔记（一）：Java内存区域
         </h1>
 
         <div class="post-meta">
@@ -179,16 +181,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
+              
 
-              <time title="Created: 2020-06-01 21:43:46" itemprop="dateCreated datePublished" datetime="2020-06-01T21:43:46+08:00">2020-06-01</time>
+              <time title="Created: 2020-06-07 21:18:13 / Modified: 21:31:20" itemprop="dateCreated datePublished" datetime="2020-06-07T21:18:13+08:00">2020-06-07</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-06-02 09:30:44" itemprop="dateModified" datetime="2020-06-02T09:30:44+08:00">2020-06-02</time>
-              </span>
 
           
             <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
@@ -208,25 +204,24 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>本文记录个人博客的搭建过程及过程中遇到的问题</p>
-<h2 id="搭建过程"><a href="#搭建过程" class="headerlink" title="搭建过程"></a>搭建过程</h2><p>本博客的搭建基于Hexo+Github，主要参考了以下专栏和博客进行搭建：</p>
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>《Java虚拟机学习笔记》系列整理了Java虚拟机的相关基础知识。这是本系列的第一篇，介绍Java内存区域的划分。</p>
 <a id="more"></a>
-<ul>
-<li><a href="https://zhuanlan.zhihu.com/p/56943330" target="_blank" rel="noopener">使用 Hexo+GitHub 搭建个人免费博客教程（小白向）</a></li>
-<li><a href="https://blog.csdn.net/jzooo/article/details/46781805" target="_blank" rel="noopener">零基础免费搭建个人博客-hexo+github</a></li>
-<li><a href="https://www.jianshu.com/p/189fd945f38f" target="_blank" rel="noopener">搭建个人博客-hexo+github详细完整步骤</a></li>
-</ul>
-<p>博客搭建的大致流程如下，详细内容可以参看上述链接。</p>
-<ol>
-<li>下载并安装环境。包括Git和Node.js；</li>
-<li>安装Hexo并初始化（注：在用npm安装时可能会有网络问题，解决方法会在下一部分提到）</li>
-<li>部署Hexo到GitHub Pages;</li>
-<li>绑定域名（暂无）</li>
-<li>大功告成，可以开始使用啦！</li>
+
+<h2 id="Java-内存区域"><a href="#Java-内存区域" class="headerlink" title="Java 内存区域"></a>Java 内存区域</h2><p><img src="/images/%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA.jpg" alt="alt"></p>
+<h3 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h3><p>当前线程所执行的字节码的行号指示器。唯一在JVM规范中没有规定OutOfMemoryError的区域。</p>
+<h3 id="虚拟机栈"><a href="#虚拟机栈" class="headerlink" title="虚拟机栈"></a>虚拟机栈</h3><p>描述Java方法执行的动态内存模型，栈帧中存储了局部变量表、操作数栈、动态链接、方法出口等信息。</p>
+<h3 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h3><p>与虚拟机栈类似，为Native方法服务。</p>
+<h3 id="Java堆"><a href="#Java堆" class="headerlink" title="Java堆"></a>Java堆</h3><p>存储对象实例，是垃圾收集器管理的主要区域。</p>
+<h3 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h3><p>存储Java加载的类信息、常量、静态变量、即时编译器编译后的代码、运行时常量池等。</p>
+<p>运行时常量池可以在运行期间加入新的常量，例如</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">String s1 &#x3D; &quot;abc&quot;;  &#x2F;&#x2F;自动放入字符串常量池</span><br><span class="line">String s2 &#x3D; &quot;abc&quot;;</span><br><span class="line">String s3 &#x3D; new String(&quot;abc&quot;);  &#x2F;&#x2F;新建一个对象</span><br><span class="line">System.out.println(s1 &#x3D;&#x3D; s2);   &#x2F;&#x2F;true</span><br><span class="line">System.out.println(s1 &#x3D;&#x3D; s3);   &#x2F;&#x2F;false</span><br><span class="line">System.out.println(s1 &#x3D;&#x3D; s3.intern());  &#x2F;&#x2F;true</span><br></pre></td></tr></table></figure>
+<p>当调用 intern 方法时，如果池中已经包含一个与此 String 对象相等的字符串（该对象由 equals(Object) 方法确定），则返回池中的字符串。否则，将此 String 对象添加到池中，并且返回此 String 对象的引用。</p>
+<h3 id="Java-8-内存模型的改进"><a href="#Java-8-内存模型的改进" class="headerlink" title="Java 8 内存模型的改进"></a>Java 8 内存模型的改进</h3><p>jdk1.8 移除了内存模型中方法区的实现永久代（Perm Gen space），取而代之的是元空间（Metaspace）。当方法区内存使用较多时，元空间会使用物理内存，减少了内存溢出的风险。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ol>
+<li>《深入理解Java虚拟机》</li>
+<li><a href="http://www.k6k4.com/simple_question/qshow/aaqhiyoot1533387259114" target="_blank" rel="noopener">描述Java内存模型</a></li>
+<li><a href="http://www.k6k4.com/simple_question/qshow/aaqlgrogd1539147684253" target="_blank" rel="noopener">Java 8 内存模型进行了哪些改进</a></li>
 </ol>
-<h2 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h2><h3 id="使用npm安装时报错"><a href="#使用npm安装时报错" class="headerlink" title="使用npm安装时报错"></a>使用npm安装时报错</h3><p>主要是因为网络连接超时，可以换成国内的镜像源。具体参考<a href="https://blog.csdn.net/jzooo/article/details/46781805" target="_blank" rel="noopener">零基础免费搭建个人博客-hexo+github</a>。</p>
-<h3 id="github-io连接超时"><a href="#github-io连接超时" class="headerlink" title="github.io连接超时"></a>github.io连接超时</h3><p>修改hosts文件，节省DNS解析的时间。具体参考<a href="https://www.cnblogs.com/vip-deng-vip/p/12233242.html" target="_blank" rel="noopener">github无法访问的解决实践
-</a>和 <a href="https://blog.csdn.net/qq_42540989/article/details/83745126" target="_blank" rel="noopener">GitHub.com无法访问，连接超时</a></p>
 
     </div>
 
@@ -236,7 +231,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/" rel="tag"># 博客搭建</a>
+              <a href="/tags/JVM/" rel="tag"># JVM</a>
           </div>
 
         
@@ -245,13 +240,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/06/01/hello-world/" rel="prev" title="Hello World">
-      <i class="fa fa-chevron-left"></i> Hello World
+    <a href="/2020/06/04/Process/" rel="prev" title="进程、线程与死锁">
+      <i class="fa fa-chevron-left"></i> 进程、线程与死锁
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/06/04/Process/" rel="next" title="进程、线程与死锁">
-      进程、线程与死锁 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -310,7 +302,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#搭建过程"><span class="nav-number">1.</span> <span class="nav-text">搭建过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#遇到的问题"><span class="nav-number">2.</span> <span class="nav-text">遇到的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用npm安装时报错"><span class="nav-number">2.1.</span> <span class="nav-text">使用npm安装时报错</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#github-io连接超时"><span class="nav-number">2.2.</span> <span class="nav-text">github.io连接超时</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Java-内存区域"><span class="nav-number">2.</span> <span class="nav-text">Java 内存区域</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#程序计数器"><span class="nav-number">2.1.</span> <span class="nav-text">程序计数器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#虚拟机栈"><span class="nav-number">2.2.</span> <span class="nav-text">虚拟机栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#本地方法栈"><span class="nav-number">2.3.</span> <span class="nav-text">本地方法栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java堆"><span class="nav-number">2.4.</span> <span class="nav-text">Java堆</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法区"><span class="nav-number">2.5.</span> <span class="nav-text">方法区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java-8-内存模型的改进"><span class="nav-number">2.6.</span> <span class="nav-text">Java 8 内存模型的改进</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-number">3.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
