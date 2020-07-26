@@ -28,10 +28,10 @@
 <meta property="og:description" content="引言本文整理了Java中 synchronized 和 volatile 关键字的相关知识。 synchronized 关键字简介synchronized关键字用于保证对对象、方法和代码块的操作的线程安全，被synchronized修饰的方法和代码块在一个时刻只能有一个线程访问。它属于悲观锁、排他锁、可重入锁。在Java的早期版本中，synchronized属于重量级锁，效率低下。JDK1.6对锁">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-07-17T03:09:42.000Z">
-<meta property="article:modified_time" content="2020-07-17T03:09:42.055Z">
+<meta property="article:modified_time" content="2020-07-26T03:45:07.080Z">
 <meta property="article:author" content="qhybupt">
-<meta property="article:tag" content="线程">
 <meta property="article:tag" content="Java">
+<meta property="article:tag" content="线程">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2020/07/17/Java-multi-thread2/">
@@ -183,6 +183,13 @@
 
               <time title="Created: 2020-07-17 11:09:42" itemprop="dateCreated datePublished" datetime="2020-07-17T11:09:42+08:00">2020-07-17</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-07-26 11:45:07" itemprop="dateModified" datetime="2020-07-26T11:45:07+08:00">2020-07-26</time>
+              </span>
 
           
             <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
@@ -235,7 +242,7 @@
 <h3 id="volatile-与-synchronized"><a href="#volatile-与-synchronized" class="headerlink" title="volatile 与 synchronized"></a>volatile 与 synchronized</h3><table>
 <thead>
 <tr>
-<th align="left">volatie</th>
+<th align="left">volatile</th>
 <th align="left">synchronized</th>
 </tr>
 </thead>
@@ -274,8 +281,8 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E7%BA%BF%E7%A8%8B/" rel="tag"># 线程</a>
               <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/%E7%BA%BF%E7%A8%8B/" rel="tag"># 线程</a>
           </div>
 
         

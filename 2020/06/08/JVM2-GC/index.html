@@ -28,7 +28,7 @@
 <meta property="og:description" content="引言《Java虚拟机学习笔记》系列整理了Java虚拟机的相关基础知识。这是本系列的第二篇，介绍JVM的常见垃圾收集算法及内存分配策略。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-06-08T08:11:19.000Z">
-<meta property="article:modified_time" content="2020-06-09T03:18:05.903Z">
+<meta property="article:modified_time" content="2020-07-26T03:31:19.063Z">
 <meta property="article:author" content="qhybupt">
 <meta property="article:tag" content="JVM">
 <meta name="twitter:card" content="summary">
@@ -187,7 +187,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2020-06-09 11:18:05" itemprop="dateModified" datetime="2020-06-09T11:18:05+08:00">2020-06-09</time>
+                <time title="Modified: 2020-07-26 11:31:19" itemprop="dateModified" datetime="2020-07-26T11:31:19+08:00">2020-07-26</time>
               </span>
 
           
@@ -216,10 +216,10 @@
 <h4 id="可达性分析法"><a href="#可达性分析法" class="headerlink" title="可达性分析法"></a>可达性分析法</h4><p>从GC Roots出发向下搜索，当从GC Roots到对象不可达时，该对象可以被回收。</p>
 <h3 id="如何回收"><a href="#如何回收" class="headerlink" title="如何回收"></a>如何回收</h3><h4 id="标记-清除算法"><a href="#标记-清除算法" class="headerlink" title="标记-清除算法"></a>标记-清除算法</h4><p>首先标记出需要收集清理的对象，然后同一回收。</p>
 <p>缺点：效率低，会产生内存碎片。</p>
-<h4 id="复制算法"><a href="#复制算法" class="headerlink" title="复制算法"></a>复制算法</h4><p>将内存区域分为两块，每次只在一块内存上新建对象，当这块内存用完时，就将还存活的对象复制到另一块内存上，并清楚这块内存。</p>
+<h4 id="复制算法"><a href="#复制算法" class="headerlink" title="复制算法"></a>复制算法</h4><p>将内存区域分为两块，每次只在一块内存上新建对象，当这块内存用完时，就将还存活的对象复制到另一块内存上，并清除这块内存。</p>
 <p>优点：解决了产生内存碎片的问题。</p>
 <p>缺点：内存使用率低，浪费了内存。</p>
-<p>现在大部分JVM都采样这种算法来实现新生代的GC。例如，HotSpot虚拟机将新生代分为一块较大的Eden区和两块较小的Survivor区，大小比例默认为8:1:1。每次使用Eden和一个Survivor（记为S0），空间占满后，将存活对象复制到另一个Survivor（记为S1），清理Eden和S0.下一轮使用Eden和S1，S0存放存活对象。</p>
+<p>现在大部分JVM都采样这种算法来实现新生代的GC。例如，HotSpot虚拟机将新生代分为一块较大的Eden区和两块较小的Survivor区，大小比例默认为8:1:1。每次使用Eden和一个Survivor（记为S0），空间占满后，将存活对象复制到另一个Survivor（记为S1），清理Eden和S0。下一轮使用Eden和S1，存活对象则存放在S0。</p>
 <h4 id="标记-整理算法"><a href="#标记-整理算法" class="headerlink" title="标记-整理算法"></a>标记-整理算法</h4><p>整合了标记-清除算法和复制算法，标记出垃圾后，将存活对象整理到内存的一端，并将其余部分清除。</p>
 <h4 id="分代收集算法"><a href="#分代收集算法" class="headerlink" title="分代收集算法"></a>分代收集算法</h4><p>将将堆分为新生代和老年代。新生代采用复制算法，老年代采用标记-整理算法或标记-清除算法。</p>
 <h3 id="垃圾收集器"><a href="#垃圾收集器" class="headerlink" title="垃圾收集器"></a>垃圾收集器</h3><h4 id="Serial"><a href="#Serial" class="headerlink" title="Serial"></a>Serial</h4><p>单线程，基于复制算法。最基本，发展最悠久。Client模式下的默认新生代收集器，常用于桌面应用。</p>
@@ -230,7 +230,7 @@
 <h4 id="CMS-Concurrent-Mark-Sweep"><a href="#CMS-Concurrent-Mark-Sweep" class="headerlink" title="CMS (Concurrent Mark Sweep)"></a>CMS (Concurrent Mark Sweep)</h4><p>基于标记-清除算法，应用于老年代。分为四个步骤：</p>
 <ul>
 <li>初始标记：仅标记与GC Roots直接关联的对象；</li>
-<li>并发标记：并发地向下搜索标记，即在标记与用户程序同时运行；</li>
+<li>并发标记：并发地向下搜索标记，即标记与用户程序同时运行；</li>
 <li>重新标记：修正在并发标记过程中发生变动的标记；</li>
 <li>并发清除。</li>
 </ul>
