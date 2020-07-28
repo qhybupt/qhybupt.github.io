@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="引言本文整理了Java中线程池的相关知识，包括线程池的作用、创建、拒绝策略等内容。 线程池简介池化是一种很常见的设计思想，比如如Java线程池、JDBC连接池、Redis连接池等就是这类设计的代表。这类设计会预设一些资源，以降低不断创建和销毁资源的开销。使用线程池的主要优势如下：  降低资源消耗：通过重复利用已创建的线程降低线程创建和销毁造成的的消耗。 提高响应速度：当任务到达时，任务不用等待线程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java多线程与同步（三）：线程池">
+<meta property="og:url" content="http://yoursite.com/2020/07/28/Java-multi-thread-3/index.html">
+<meta property="og:site_name" content="Q&#39;s Blog">
+<meta property="og:description" content="引言本文整理了Java中线程池的相关知识，包括线程池的作用、创建、拒绝策略等内容。 线程池简介池化是一种很常见的设计思想，比如如Java线程池、JDBC连接池、Redis连接池等就是这类设计的代表。这类设计会预设一些资源，以降低不断创建和销毁资源的开销。使用线程池的主要优势如下：  降低资源消耗：通过重复利用已创建的线程降低线程创建和销毁造成的的消耗。 提高响应速度：当任务到达时，任务不用等待线程">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://yoursite.com/images/ThreadPool.png">
+<meta property="article:published_time" content="2020-07-28T08:19:10.000Z">
+<meta property="article:modified_time" content="2020-07-28T08:19:10.837Z">
+<meta property="article:author" content="qhybupt">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="线程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/images/ThreadPool.png">
+
+<link rel="canonical" href="http://yoursite.com/2020/07/28/Java-multi-thread-3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Java多线程与同步（三）：线程池 | Q's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Q's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">hello world</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/28/Java-multi-thread-3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="qhybupt">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Q's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java多线程与同步（三）：线程池
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-07-28 16:19:10" itemprop="dateCreated datePublished" datetime="2020-07-28T16:19:10+08:00">2020-07-28</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>本文整理了Java中线程池的相关知识，包括线程池的作用、创建、拒绝策略等内容。</p>
+<h2 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>池化是一种很常见的设计思想，比如如Java线程池、JDBC连接池、Redis连接池等就是这类设计的代表。这类设计会预设一些资源，以降低不断创建和销毁资源的开销。使用线程池的主要优势如下：</p>
+<ul>
+<li><strong>降低资源消耗</strong>：通过重复利用已创建的线程降低线程创建和销毁造成的的消耗。</li>
+<li><strong>提高响应速度</strong>：当任务到达时，任务不用等待线程的创建，可以直接立即执行。</li>
+<li><strong>提高线程的可管理性</strong>：无限制的创建线程不仅会消耗系统资源，还会降低系统的稳定性。线程池可以对线程进行同一的分配、调优和监控。</li>
+</ul>
+<a id="more"></a>
+
+<h3 id="线程池的创建"><a href="#线程池的创建" class="headerlink" title="线程池的创建"></a>线程池的创建</h3><ul>
+<li>通过ThreadPoolExecutor的构造⽅法实现</li>
+<li>通过Executor框架的⼯具类Executors来实现，内部实际上通过重载ThreadPoolExecutor不同的构造器创建线程池<ul>
+<li><code>newFixedThreadPool</code>：创建一个固定长度的线程池。当有一个新任务被提交时，若线程池中有空闲线程则执行该任务，否则该任务会被暂存到一个任务队列中，等到有线程空闲再执行。</li>
+<li><code>newSingleThreadExecutor</code>：创建只有一个线程的线程池。当有多余的任务被提交时，任务会被存放到任务队列中。当线程空闲时，按先入先出的顺序执行队列中的任务。</li>
+<li><code>newCachedThreadPool</code>：创建一个可根据情况调整线程数量的线程池。当线程规模超过了处理器需求，则回收空闲线程；当新任务到达，又没有空闲线程时，则会创建新的线程。</li>
+<li><code>newScheduledThreadPool</code>：创建一个固定长度的线程池，并以延迟或定时的方式来执行任务。</li>
+</ul>
+</li>
+<li>注意：Executors返回线程池存在如下弊端，因而《阿里巴巴Java开发手册》中强制线程池不允许使用Executors去创建，而是通过 ThreadPoolExecutor的方式。<ul>
+<li>FixedThreadPool和SingleThreadExecutor允许请求的队列长度为Integer.MAX_VALUE，可能堆积大量的请求，从而导致OOM。</li>
+<li>CachedThreadPool和ScheduledThreadPool允许创建的线程数量为Integer.MAX_VALUE，可能创建大量的线程，从而导致OOM。</li>
+</ul>
+</li>
+</ul>
+<h3 id="ThreadPoolExecutor构造器中的参数"><a href="#ThreadPoolExecutor构造器中的参数" class="headerlink" title="ThreadPoolExecutor构造器中的参数"></a>ThreadPoolExecutor构造器中的参数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;**</span><br><span class="line">* 用给定的初始参数创建一个新的ThreadPoolExecutor</span><br><span class="line">*&#x2F;</span><br><span class="line">public ThreadPoolExecutor(int corePoolSize,</span><br><span class="line">                            int maximumPoolSize,</span><br><span class="line">                            long keepAliveTime,</span><br><span class="line">                            TimeUnit unit,</span><br><span class="line">                            BlockingQueue&lt;Runnable&gt; workQueue,</span><br><span class="line">                            ThreadFactory threadFactory,</span><br><span class="line">                            RejectedExecutionHandler handler) &#123;</span><br><span class="line">    if (corePoolSize &lt; 0 ||</span><br><span class="line">        maximumPoolSize &lt;&#x3D; 0 ||</span><br><span class="line">        maximumPoolSize &lt; corePoolSize ||</span><br><span class="line">        keepAliveTime &lt; 0)</span><br><span class="line">        throw new IllegalArgumentException();</span><br><span class="line">    if (workQueue &#x3D;&#x3D; null || threadFactory &#x3D;&#x3D; null || handler &#x3D;&#x3D; null)</span><br><span class="line">        throw new NullPointerException();</span><br><span class="line">    this.corePoolSize &#x3D; corePoolSize;</span><br><span class="line">    this.maximumPoolSize &#x3D; maximumPoolSize;</span><br><span class="line">    this.workQueue &#x3D; workQueue;</span><br><span class="line">    this.keepAliveTime &#x3D; unit.toNanos(keepAliveTime);</span><br><span class="line">    this.threadFactory &#x3D; threadFactory;</span><br><span class="line">    this.handler &#x3D; handler;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>corePoolSize</strong>：线程池的核心线程数，即线程池中可以同时运行的最小线程数量。</li>
+<li><strong>maximumPoolSize</strong>：线程池的最大线程数，即任务队列满的时候，可以同时运行的最大线程数量。</li>
+<li><strong>workQueue</strong>：线程池暂存任务的队列。如果当前运行的线程数量达到corePoolSize，就将新任务放入队列。</li>
+<li>keepAliveTime：存活时间。当线程池中的线程数大于corePoolSize时，超出核心线程数的空闲线程不会被立即销毁，而是等到超时。</li>
+<li>unit：keepAliveTime的时间单位。</li>
+<li>threadFactory：线程池使用的创建线程工厂方法。</li>
+<li>handler：线程池的拒绝策略。</li>
+</ul>
+<h3 id="拒绝策略"><a href="#拒绝策略" class="headerlink" title="拒绝策略"></a>拒绝策略</h3><p>当提交的任务数大于corePoolSize时，会先放到队列中。只有填满了缓冲队列后，才会判断当前运行的任务是否大于maxPoolSize，如果小于就创建新线程处理，如果大于就触发拒绝策略。这也就是说，当提交任务数大于 maxPoolSize + queueSize 时就会触发线程池的拒绝策略。</p>
+<ul>
+<li><strong>AbortPolicy</strong>：直接抛出拒绝执行的异常<code>RejectedExecutionException</code>。</li>
+<li><strong>CallerRunsPolicy</strong>：由提交任务的线程自己执行任务。适用于不允许失败，性能要求低且并发量小的场景。</li>
+<li><strong>DiscardPolicy</strong>：不做处理，直接丢弃任务。</li>
+<li><strong>DiscardOldestPolicy</strong>：不做处理，直接丢弃最早的任务。</li>
+</ul>
+<h3 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h3><p>线程池的工作原理在上一节中有提到，这里将线程池的工作流程整理成下图：</p>
+<p><img src="/images/ThreadPool.png" alt="线程池工作原理"></p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ol>
+<li><a href="https://snailclimb.gitee.io/javaguide/#/docs/java/Multithread/JavaConcurrencyAdvancedCommonInterviewQuestions" target="_blank" rel="noopener">Java 并发进阶常见面试题总结</a></li>
+<li><a href="https://blog.csdn.net/qq_41112238/java/article/details/105074636" target="_blank" rel="noopener">【7万字干货】2021Java实习必看面试两百题解析</a></li>
+<li><a href="https://mp.weixin.qq.com/s?__biz=Mzg2OTA0Njk0OA==&mid=2247485679&idx=1&sn=57dbca8c9ad49e1f3968ecff04a4f735&chksm=cea24724f9d5ce3212292fac291234a760c99c0960b5430d714269efe33554730b5f71208582&token=1141994790&lang=zh_CN%23rd" target="_blank" rel="noopener">面试官问：线程池除了常见的4种拒绝策略，你还知道哪些？</a></li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/%E7%BA%BF%E7%A8%8B/" rel="tag"># 线程</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/07/17/Java-multi-thread2/" rel="prev" title="Java多线程与同步（二）：synchronized 和 volatile">
+      <i class="fa fa-chevron-left"></i> Java多线程与同步（二）：synchronized 和 volatile
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程池"><span class="nav-number">2.</span> <span class="nav-text">线程池</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#简介"><span class="nav-number">2.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#线程池的创建"><span class="nav-number">2.2.</span> <span class="nav-text">线程池的创建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ThreadPoolExecutor构造器中的参数"><span class="nav-number">2.3.</span> <span class="nav-text">ThreadPoolExecutor构造器中的参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#拒绝策略"><span class="nav-number">2.4.</span> <span class="nav-text">拒绝策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#工作原理"><span class="nav-number">2.5.</span> <span class="nav-text">工作原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-number">3.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">qhybupt</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">qhybupt</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
