@@ -20,15 +20,21 @@
     var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Q&#39;s Blog">
-<meta property="og:url" content="http://yoursite.com/tags/Java%E9%9B%86%E5%90%88/index.html">
+  <meta name="description" content="sleep 和 wait在Java多线程与同步（一）：线程状态与锁一文中有介绍 wait() 和 sleep() 的区别。这里补充说明一下，只有 wait() 方法属于 Object 类，其他三个方法都属于 Thread 类，并且只有 wait() 方法会释放占用的锁。 yield与其他三个方法不同的是，yield() 方法不阻塞线程，而是会使当前线程让出CPU时间片给优先级相同或更高的线程，回到">
+<meta property="og:type" content="article">
+<meta property="og:title" content="sleep、wait、yield 和 suspend">
+<meta property="og:url" content="http://yoursite.com/2020/10/01/sleep-wait-yield-and-suspend/index.html">
 <meta property="og:site_name" content="Q&#39;s Blog">
+<meta property="og:description" content="sleep 和 wait在Java多线程与同步（一）：线程状态与锁一文中有介绍 wait() 和 sleep() 的区别。这里补充说明一下，只有 wait() 方法属于 Object 类，其他三个方法都属于 Thread 类，并且只有 wait() 方法会释放占用的锁。 yield与其他三个方法不同的是，yield() 方法不阻塞线程，而是会使当前线程让出CPU时间片给优先级相同或更高的线程，回到">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-10-01T03:20:35.000Z">
+<meta property="article:modified_time" content="2020-10-01T03:20:35.164Z">
 <meta property="article:author" content="qhybupt">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="线程">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/tags/Java%E9%9B%86%E5%90%88/">
+<link rel="canonical" href="http://yoursite.com/2020/10/01/sleep-wait-yield-and-suspend/">
 
 
 <script id="page-configurations">
@@ -36,12 +42,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'en'
   };
 </script>
 
-  <title>Tag: Java集合 | Q's Blog</title>
+  <title>sleep、wait、yield 和 suspend | Q's Blog</title>
   
 
 
@@ -145,51 +151,94 @@
         <div class="content-wrap">
           
 
-          <div class="content tag">
+          <div class="content post posts-expand">
             
 
+    
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <h2 class="collection-header">Java集合
-          <small>Tag</small>
-        </h2>
-      </div>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/10/01/sleep-wait-yield-and-suspend/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="qhybupt">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Q's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          sleep、wait、yield 和 suspend
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-10-01 11:20:35" itemprop="dateCreated datePublished" datetime="2020-10-01T11:20:35+08:00">2020-10-01</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <span class="collection-header">2020</span>
+        <h2 id="sleep-和-wait"><a href="#sleep-和-wait" class="headerlink" title="sleep 和 wait"></a>sleep 和 wait</h2><p>在<a href="https://qhybupt.github.io/2020/07/16/Java-multi-thread" target="_blank" rel="noopener">Java多线程与同步（一）：线程状态与锁</a>一文中有介绍 <code>wait()</code> 和 <code>sleep()</code> 的区别。这里补充说明一下，只有 <code>wait()</code> 方法属于 Object 类，其他三个方法都属于 Thread 类，并且只有 <code>wait()</code> 方法会释放占用的锁。</p>
+<h2 id="yield"><a href="#yield" class="headerlink" title="yield"></a>yield</h2><p>与其他三个方法不同的是，<code>yield()</code> 方法不阻塞线程，而是会使当前线程让出CPU时间片给优先级相同或更高的线程，回到 RUNNABLE 状态，与其他线程一起重新竞争CPU时间片。</p>
+<h2 id="suspend"><a href="#suspend" class="headerlink" title="suspend"></a>suspend</h2><p>与 <code>wait()</code> 方法类似，但不会释放占用的锁。<code>suspend()</code> 需和 <code>resume()</code> 配套使用。<code>suspend()</code> 使当前线程阻塞，且不会自动恢复，只有调用 <code>resume()</code> 才会使当前的线程恢复可执行状态。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ol>
+<li><a href="https://www.cnblogs.com/baoendemao/p/3804732.html" target="_blank" rel="noopener">java线程阻塞（sleep,suspend,resume,yield,wait,notify）</a></li>
+<li><a href="https://cloud.tencent.com/developer/article/1423577" target="_blank" rel="noopener">Sleep、Wait、Yield、Suspend</a></li>
+<li><a href="https://blog.csdn.net/qq_41112238/article/details/105074636" target="_blank" rel="noopener">【7万字干货】2021Java实习必看面试两百题解析</a></li>
+</ol>
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+    
+    
+    
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-06-21T17:16:38+08:00"
-              content="2020-06-21">
-          06-21
-        </time>
-      </div>
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/%E7%BA%BF%E7%A8%8B/" rel="tag"># 线程</a>
+          </div>
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/06/21/Java-Collection-1/" itemprop="url">
-            <span itemprop="name">Java集合框架概览</span>
-          </a>
-      </div>
+        
 
-    </header>
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/08/27/MySQL-1/" rel="prev" title="MySQL学习笔记（一）：MySQL的逻辑架构">
+      <i class="fa fa-chevron-left"></i> MySQL学习笔记（一）：MySQL的逻辑架构
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
   </article>
-
-    </div>
-  </div>
   
   
-  
-
   
 
 
@@ -242,6 +291,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#sleep-和-wait"><span class="nav-number">1.</span> <span class="nav-text">sleep 和 wait</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#yield"><span class="nav-number">2.</span> <span class="nav-text">yield</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#suspend"><span class="nav-number">3.</span> <span class="nav-text">suspend</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-number">4.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
