@@ -20,15 +20,20 @@
     var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Q&#39;s Blog">
-<meta property="og:url" content="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/index.html">
+  <meta name="description" content="jdk 1.6以前 synchronized 关键字只表示重量级锁，1.6之后对synchronized 关键字的实现进行了优化，分为无锁、偏向锁、轻量级锁、重量级锁等状态，这种锁逐步升级的过程也被称作“锁膨胀”。  当第一个线程获取需要加锁的资源后，锁的状态会从无锁升级为偏向锁。偏向锁针对的是锁仅会被同一线程持有的情况，属于乐观锁。 当存在另外的线程访问资源时，锁的状态会从偏向锁升级为轻量级锁。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="synchronized 锁膨胀">
+<meta property="og:url" content="http://yoursite.com/2020/10/05/synchronized-%E9%94%81%E8%86%A8%E8%83%80/index.html">
 <meta property="og:site_name" content="Q&#39;s Blog">
+<meta property="og:description" content="jdk 1.6以前 synchronized 关键字只表示重量级锁，1.6之后对synchronized 关键字的实现进行了优化，分为无锁、偏向锁、轻量级锁、重量级锁等状态，这种锁逐步升级的过程也被称作“锁膨胀”。  当第一个线程获取需要加锁的资源后，锁的状态会从无锁升级为偏向锁。偏向锁针对的是锁仅会被同一线程持有的情况，属于乐观锁。 当存在另外的线程访问资源时，锁的状态会从偏向锁升级为轻量级锁。">
 <meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-10-05T04:26:39.000Z">
+<meta property="article:modified_time" content="2020-10-05T04:26:39.395Z">
 <meta property="article:author" content="qhybupt">
+<meta property="article:tag" content="Java">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">
+<link rel="canonical" href="http://yoursite.com/2020/10/05/synchronized-%E9%94%81%E8%86%A8%E8%83%80/">
 
 
 <script id="page-configurations">
@@ -36,12 +41,12 @@
   CONFIG.page = {
     sidebar: "",
     isHome : false,
-    isPost : false,
+    isPost : true,
     lang   : 'en'
   };
 </script>
 
-  <title>Tag: 数据结构 | Q's Blog</title>
+  <title>synchronized 锁膨胀 | Q's Blog</title>
   
 
 
@@ -145,51 +150,95 @@
         <div class="content-wrap">
           
 
-          <div class="content tag">
+          <div class="content post posts-expand">
             
 
+    
   
   
-  
-  <div class="post-block">
-    <div class="posts-collapse">
-      <div class="collection-title">
-        <h2 class="collection-header">数据结构
-          <small>Tag</small>
-        </h2>
-      </div>
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/10/05/synchronized-%E9%94%81%E8%86%A8%E8%83%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="qhybupt">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Q's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          synchronized 锁膨胀
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-10-05 12:26:39" itemprop="dateCreated datePublished" datetime="2020-10-05T12:26:39+08:00">2020-10-05</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-    <div class="collection-year">
-      <span class="collection-header">2020</span>
+        <p>jdk 1.6以前 <code>synchronized</code> 关键字只表示重量级锁，1.6之后对<code>synchronized</code> 关键字的实现进行了优化，分为无锁、偏向锁、轻量级锁、重量级锁等状态，这种锁逐步升级的过程也被称作“锁膨胀”。</p>
+<ul>
+<li>当第一个线程获取需要加锁的资源后，锁的状态会从<strong>无锁</strong>升级为<strong>偏向锁</strong>。偏向锁针对的是锁仅会被同一线程持有的情况，属于乐观锁。</li>
+<li>当存在另外的线程访问资源时，锁的状态会从<strong>偏向锁</strong>升级为<strong>轻量级锁</strong>。轻量级锁针对的是多个线程在不同时间段申请同一把锁的情况，属于乐观锁。</li>
+<li>当多个线程同时竞争资源时，锁的状态会升级为最终的<strong>重量级锁</strong>。重量级锁针对的是多个线程同时竞争同一把锁的情况，属于悲观锁。</li>
+</ul>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ol>
+<li><a href="https://www.cnblogs.com/yuhangwang/p/11295940.html" target="_blank" rel="noopener">java并发笔记四之synchronized 锁的膨胀过程（锁的升级过程）深入剖析</a></li>
+<li><a href="https://blog.csdn.net/u013568373/article/details/94486829" target="_blank" rel="noopener">synchronized 锁优化（二）：锁的状态及锁膨胀</a></li>
+</ol>
+
     </div>
 
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+    
+    
+    
 
-      <div class="post-meta">
-        <time itemprop="dateCreated"
-              datetime="2020-08-04T21:29:27+08:00"
-              content="2020-08-04">
-          08-04
-        </time>
-      </div>
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+          </div>
 
-      <div class="post-title">
-          <a class="post-title-link" href="/2020/08/04/BST-and-Heap/" itemprop="url">
-            <span itemprop="name">二叉排序树与堆</span>
-          </a>
-      </div>
+        
 
-    </header>
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/10/01/sleep-wait-yield-and-suspend/" rel="prev" title="sleep、wait、yield 和 suspend">
+      <i class="fa fa-chevron-left"></i> sleep、wait、yield 和 suspend
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
   </article>
-
-    </div>
-  </div>
   
   
-  
-
   
 
 
@@ -242,6 +291,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#参考文献"><span class="nav-number">1.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

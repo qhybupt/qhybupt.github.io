@@ -151,6 +151,73 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/10/05/synchronized-%E9%94%81%E8%86%A8%E8%83%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="qhybupt">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Q's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/10/05/synchronized-%E9%94%81%E8%86%A8%E8%83%80/" class="post-title-link" itemprop="url">synchronized 锁膨胀</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-10-05 12:26:39" itemprop="dateCreated datePublished" datetime="2020-10-05T12:26:39+08:00">2020-10-05</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>jdk 1.6以前 <code>synchronized</code> 关键字只表示重量级锁，1.6之后对<code>synchronized</code> 关键字的实现进行了优化，分为无锁、偏向锁、轻量级锁、重量级锁等状态，这种锁逐步升级的过程也被称作“锁膨胀”。</p>
+<ul>
+<li>当第一个线程获取需要加锁的资源后，锁的状态会从<strong>无锁</strong>升级为<strong>偏向锁</strong>。偏向锁针对的是锁仅会被同一线程持有的情况，属于乐观锁。</li>
+<li>当存在另外的线程访问资源时，锁的状态会从<strong>偏向锁</strong>升级为<strong>轻量级锁</strong>。轻量级锁针对的是多个线程在不同时间段申请同一把锁的情况，属于乐观锁。</li>
+<li>当多个线程同时竞争资源时，锁的状态会升级为最终的<strong>重量级锁</strong>。重量级锁针对的是多个线程同时竞争同一把锁的情况，属于悲观锁。</li>
+</ul>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><ol>
+<li><a href="https://www.cnblogs.com/yuhangwang/p/11295940.html" target="_blank" rel="noopener">java并发笔记四之synchronized 锁的膨胀过程（锁的升级过程）深入剖析</a></li>
+<li><a href="https://blog.csdn.net/u013568373/article/details/94486829" target="_blank" rel="noopener">synchronized 锁优化（二）：锁的状态及锁膨胀</a></li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/10/01/sleep-wait-yield-and-suspend/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -755,71 +822,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/18/Java-Exception/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="qhybupt">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Q's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/06/18/Java-Exception/" class="post-title-link" itemprop="url">Java中的异常</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-06-18 20:01:35" itemprop="dateCreated datePublished" datetime="2020-06-18T20:01:35+08:00">2020-06-18</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>在写代码的过程中难免会出现异常错误，有些是在编译时就无法通过，有些则是在运行时才会出现。本文整理了Java中异常的分类以及异常的处理方法。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/06/18/Java-Exception/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -889,7 +891,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-count">17</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
