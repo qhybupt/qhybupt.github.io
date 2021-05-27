@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="本文翻译自thingML开源项目的README。   注意：本文中的某些表述和引用资料可能已经不适用于最新版的ThingML。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="thingML开源项目">
+<meta property="og:url" content="http://yoursite.com/2021/05/27/thingML%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/index.html">
+<meta property="og:site_name" content="Q&#39;s Blog">
+<meta property="og:description" content="本文翻译自thingML开源项目的README。   注意：本文中的某些表述和引用资料可能已经不适用于最新版的ThingML。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://opensource.org/files/osi_keyhole_100X100_90ppi.png">
+<meta property="article:published_time" content="2021-05-27T11:09:13.000Z">
+<meta property="article:modified_time" content="2021-05-27T11:09:14.018Z">
+<meta property="article:author" content="qhybupt">
+<meta property="article:tag" content="thingML">
+<meta property="article:tag" content="物联网">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://opensource.org/files/osi_keyhole_100X100_90ppi.png">
+
+<link rel="canonical" href="http://yoursite.com/2021/05/27/thingML%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>thingML开源项目 | Q's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Q's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">hello world</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/05/27/thingML%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="qhybupt">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Q's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          thingML开源项目
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-05-27 19:09:13 / Modified: 19:09:14" itemprop="dateCreated datePublished" datetime="2021-05-27T19:09:13+08:00">2021-05-27</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p><em>本文翻译自<a href="https://github.com/TelluIoT/ThingML" target="_blank" rel="noopener">thingML开源项目</a>的README。</em></p>
+</blockquote>
+<blockquote>
+<p><em>注意：本文中的某些表述和引用资料可能已经不适用于最新版的ThingML。</em></p>
+</blockquote>
+<a id="more"></a>
+
+<p>ThingML方法由 <em>i</em>）一种<strong>建模语言</strong>，<em>ii</em>）一套<strong>工具</strong>和 <em>iii</em>）一种<strong>方法论</strong>组成。建模语言结合了公认的用于设计和实现分布式响应式系统的软件建模结构：</p>
+<ul>
+<li>状态图和组件（与UML一致）通过异步消息传递进行通信</li>
+<li>独立于平台的指令性动作语言</li>
+<li>针对物联网应用的特定结构。</li>
+</ul>
+<p>ThingML语言由一套工具支持，其中包括编辑器、转换（如导出到UML）和一个先进的多平台代码生成框架，支持多种目标编程语言（C、Java、Javascript）。<a href="https://heads-project.github.io/methodology/" target="_blank" rel="noopener">方法论</a>记录了物联网服务开发者和平台专家使用的开发过程和工具。</p>
+<blockquote>
+<p>ThingML是在<a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noopener"><em>Apache 2.0许可证</em></a> 下发布的，由挪威奥斯陆SINTEF网络系统和服务部门的@ffleurey和@brice-morin与一个充满活力的<a href="https://github.com/TelluIoT/ThingML/graphs/contributors" target="_blank" rel="noopener">开源社区</a>共同开发。ThingML现在由<a href="http://www.tellucloud.com/" target="_blank" rel="noopener">Tellu</a>拥有，但仍然是开源的。</p>
+</blockquote>
+<p><strong>问题、错误报告和功能请求应提交给<a href="https://github.com/TelluIoT/ThingML/issues" target="_blank" rel="noopener">GitHub上的问题跟踪器</a></strong></p>
+<h2 id="安装ThingML"><a href="#安装ThingML" class="headerlink" title="安装ThingML"></a>安装ThingML</h2><p><em>本节应包含有关获得最新版本的ThingML和如何开始使用的信息。</em></p>
+<h3 id="版本和发布"><a href="#版本和发布" class="headerlink" title="版本和发布"></a>版本和发布</h3><p>目前ThingML的<strong>推荐版本是2.X.X版本</strong>。有标签的版本可在<a href="https://github.com/TelluIoT/ThingML/releases" target="_blank" rel="noopener">Github发布页</a>获取：</p>
+<ul>
+<li>一个独立的JAR，可以在命令行中使用：在发布页面上寻找最新的<code>*.jar</code>文件</li>
+<li>一个eclipse更新站点，用于在eclipse中安装ThingML IDE：在发布页面上寻找最新的<code>*.zip</code>文件</li>
+</ul>
+<blockquote>
+<p><strong>1.X.X版本</strong>没有得到维护，不应使用（在2017年第三季度停止维护）。2.X.X版本引入了完全重写的基于XText的解析器和编辑器。一些语法上的变化使得为版本1编写的ThingML程序与版本2不兼容。还有一些在版本1中评估过的构造，在版本2中没有重新实现（例如，组、流等）。</p>
+</blockquote>
+<h3 id="ThingML命令行编译器"><a href="#ThingML命令行编译器" class="headerlink" title="ThingML命令行编译器"></a>ThingML命令行编译器</h3><p>ThingML命令行编译器是作为一个独立的JAR发布的。它<strong>需要Java 8或更新的版本</strong>。最新的版本（<code>*.jar</code>）可以在<a href="https://github.com/TelluIoT/ThingML/releases" target="_blank" rel="noopener">发布页</a>上找到。</p>
+<p>命令行工具包含所有的代码生成器和插件，这些都是这个仓库的一部分。</p>
+<p><strong>使用方法：</strong><code>java -jar ThingML2CLI.jar</code>将提供使用信息和选项列表。</p>
+<h3 id="ThingML基于Eclipse的IDE"><a href="#ThingML基于Eclipse的IDE" class="headerlink" title="ThingML基于Eclipse的IDE"></a>ThingML基于Eclipse的IDE</h3><ol>
+<li>从<a href="https://www.eclipse.org/downloads/" target="_blank" rel="noopener">Eclipse官网</a>安装 “Eclipse IDE for Java and DSL Developers” 。</li>
+<li>从<a href="https://github.com/TelluIoT/ThingML/releases" target="_blank" rel="noopener">发布页</a>下载最新的更新站点（<code>*.zip</code>）</li>
+<li>启动Eclipse</li>
+<li>从<code>*.zip</code>文件安装ThingML插件: <code>Help -&gt; Install New Software... -&gt; Add... -&gt; Archive...</code> </li>
+</ol>
+<p><strong>使用方法：</strong>一旦安装了ThingML插件，<code>*.thingml</code>文件将用ThingML编辑器打开。右键单击<code>*.thingml</code>文件，使用<code>HEADS / ThingML</code>子菜单来编译ThingML文件。生成的代码将被放在eclipse项目根目录的<code>thingml-gen</code>文件夹中。记住，只有包含<code>configuration</code>的ThingML文件才能被编译。</p>
+<h3 id="基于Docker的发布"><a href="#基于Docker的发布" class="headerlink" title="基于Docker的发布"></a>基于Docker的发布</h3><blockquote>
+<p><strong>警告：</strong>目前Dockerub上的镜像没有自动更新。你应该从Dockerfile中构建镜像以获得最新的ThingML版本。</p>
+</blockquote>
+<p>如果你有docker，你可以在<a href="https://github.com/madkira/thingmleditor" target="_blank" rel="noopener">thingmleditor仓库</a>或<a href="https://hub.docker.com/r/madkira/thingmleditor/" target="_blank" rel="noopener">thingmleditor docker hub</a>使用带有Eclipse和ThingML的构建容器。</p>
+<h2 id="ThingML程序示例"><a href="#ThingML程序示例" class="headerlink" title="ThingML程序示例"></a>ThingML程序示例</h2><p><em>本节的目标是给出一个开箱即用的例子清单</em></p>
+<blockquote>
+<p><strong>注意：</strong>多年来，我们收集了很多不同的用ThingML制作的样例和项目。然而，他们中的大多数都没有得到维护和更新，以适应最新版本的ThingML。如果你是初学者，这可能会让你感到困惑。</p>
+</blockquote>
+<p><strong>应该开箱即用的例子：</strong></p>
+<ul>
+<li><p>基本的Arduino例子：<a href="https://github.com/ffleurey/ThingMLArduinoDemo" target="_blank" rel="noopener">https://github.com/ffleurey/ThingMLArduinoDemo</a>。”1.Basics “文件夹包含了一组处理数字IO的简单ThingML/Arduino程序。</p>
+</li>
+<li><p>多平台Breakout游戏（Arduino、Posix C、Java和Javascript）：<a href="https://github.com/ffleurey/ThingML-PongTutorial" target="_blank" rel="noopener">https://github.com/ffleurey/ThingML-PongTutorial</a>。这个例子展示了如何用ThingML创建平台独立的组件。</p>
+</li>
+<li><p>Arduino &lt;-&gt; Java通信（串行）：<a href="https://github.com/ffleurey/ThingML-PressureLogger" target="_blank" rel="noopener">https://github.com/ffleurey/ThingML-PressureLogger</a>。这个程序展示了必须创建2个ThingML程序通过串行端口进行通信。一个程序在Arduino上运行，收集传感器的测量数据。另一个是作为一个Java程序运行，通过USB/串口连接从Arduino收集测量结果并显示曲线。这个例子是相当简约的，但应该很容易为你自己的传感器/需求进行自定义。它展示了ThingML的各种功能，如串行通信插件和为ThingML程序添加Maven依赖的可能性。</p>
+</li>
+<li><p>Raspberry Pi GPIOs:<a href="https://github.com/ffleurey/ThingML-RPI-Blink" target="_blank" rel="noopener">https://github.com/ffleurey/ThingML-RPI-Blink</a>。<br>几个非常简单的例子展示了如何使用C语言或NodeJS在Raspberry Pi上闪烁LED。</p>
+</li>
+</ul>
+<p><strong>具有已知不相容性的例子:</strong></p>
+<blockquote>
+<p><strong>注意：</strong>一些旧的样例可能很容易修改，但其他的样例可能使用了已经从ThingML中删除的功能。</p>
+</blockquote>
+<ul>
+<li><p>这个仓库中的<code>org.thingml.samples</code>的例子。这个文件夹包含了许多用不同版本的ThingML制作的样例。探索一下来看看可以用ThingML做的不同事情是很好的，但它并不是开始时获得工作样例的地方。</p>
+</li>
+<li><p>来自HEADS项目的教程：<a href="https://github.com/HEADS-project/training/tree/master/1.ThingML_Basics" target="_blank" rel="noopener">https://github.com/HEADS-project/training/tree/master/1.ThingML_Basics</a>。这个教程基于不再维护的ThingML v1.0。</p>
+</li>
+</ul>
+<h2 id="编译ThingML生成的代码"><a href="#编译ThingML生成的代码" class="headerlink" title="编译ThingML生成的代码"></a>编译ThingML生成的代码</h2><p><em>ThingML编译器生成C、Java、Javascript或Go的平台特定源代码。本节给出了关于如何编译和执行生成的代码的简短指南。</em></p>
+<h3 id="JAVA-Maven"><a href="#JAVA-Maven" class="headerlink" title="JAVA / Maven"></a>JAVA / Maven</h3><hr>
+<p>编译成Java时，ThingML会创建一个完整的Maven项目，可以用<code>mvn clean install</code>构建，用<code>mvn exec:java</code>执行。</p>
+<p><strong>前提条件：</strong></p>
+<ul>
+<li>确保你有一个合适的<a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html" target="_blank" rel="noopener">JDK</a>（JRE是不够的）。</li>
+<li>安装<a href="http://maven.apache.org/" target="_blank" rel="noopener">Maven</a></li>
+</ul>
+<p><strong>使用Eclipse:</strong></p>
+<p>配置Eclipse，使其使用JDK：<code>Window -&gt; Preferences -&gt; Java -&gt; Installed JREs</code>（确保它指向一个JDK）。</p>
+<ul>
+<li>右击<code>pom.xml</code>（在<code>thingml-gen/java/your-configuration</code>中）</li>
+<li><code>Run as -&gt; Maven build...</code></li>
+<li>在<code>Goals</code>中输入：<code>clean install exec:java</code></li>
+</ul>
+<blockquote>
+<p>如果Maven声称找不到 “pom.xml “文件，请使用<code>Workspace...</code>按钮改变<code>Run as -&gt; Maven build...</code>窗口中的基本目录，使其指向<code>thingml-gen/java/your-configuration</code>。</p>
+</blockquote>
+<h3 id="网络浏览器的javascript"><a href="#网络浏览器的javascript" class="headerlink" title="网络浏览器的javascript"></a>网络浏览器的javascript</h3><hr>
+<p>没什么特别的。在你的系统浏览器（最好是Chrome或Firefox）中打开生成的<code>index.html</code>文件</p>
+<blockquote>
+<p>不要使用嵌入Eclipse中的默认网络浏览器!</p>
+</blockquote>
+<h3 id="Node-JS的Javascript"><a href="#Node-JS的Javascript" class="headerlink" title="Node.JS的Javascript"></a>Node.JS的Javascript</h3><hr>
+<p>ThingML创建了一个标准的Node.js包。</p>
+<p><strong>前提条件：</strong></p>
+<ul>
+<li>NodeJS：安装<a href="https://nodejs.org/en/" target="_blank" rel="noopener">Node.JS</a></li>
+</ul>
+<p><strong>使用Eclipse:</strong></p>
+<p>从这个更新网站上：<code>Node.JS - http://www.nodeclipse.org/updates/enide-2015/</code>，安装<code>Features included in Enide Studio .Features Set</code>和<code>Nodeclipse Node.js .Features Set    1.0.2.201509250223</code></p>
+<ul>
+<li>右击<code>package.json</code>（在<code>thingml-gen/nodejs/your-configuration</code>中）</li>
+<li><code>Run as -&gt; npm install</code></li>
+<li>右击<code>main.js</code></li>
+<li><code>Run as -&gt; Node Application</code></li>
+</ul>
+<h3 id="可视化UML图（PlantUML）"><a href="#可视化UML图（PlantUML）" class="headerlink" title="可视化UML图（PlantUML）"></a>可视化UML图（PlantUML）</h3><hr>
+<p>UML生成器生成的文件是文本文件，使用PlantUML格式。PlantUML将执行布局，并将图表导出为图像。</p>
+<p><strong>前提条件：</strong></p>
+<ul>
+<li>安装<a href="http://www.graphviz.org/Download.php" target="_blank" rel="noopener">Graphviz</a></li>
+<li>安装<a href="http://plantuml.com/" target="_blank" rel="noopener">PlantUML</a> (如果使用Eclipse插件，则不需要)</li>
+</ul>
+<p><strong>使用Eclipse:</strong></p>
+<p>使用这个更新网站在Eclipse中安装PlantUML插件：<code>http://hallvard.github.io/plantuml/</code></p>
+<ul>
+<li><code>Window -&gt; Show View -&gt; Other... -&gt; PlantUML</code></li>
+</ul>
+<blockquote>
+<p>请确保你已经安装了Graphviz。它是Eclipse插件所必需的。如果你在使用PlantUML时遇到问题，请参照<a href="http://plantuml.com/eclipse" target="_blank" rel="noopener">http://plantuml.com/eclipse</a></p>
+</blockquote>
+<h3 id="Posix-C"><a href="#Posix-C" class="headerlink" title="Posix C"></a>Posix C</h3><hr>
+<p> 生成的代码是一个完整的C项目，包括一个Makefile文件。</p>
+<ul>
+<li>在包含生成的代码的文件夹中打开终端</li>
+<li>用<code>make</code>进行编译</li>
+<li>用<code>./your-configuration</code>运行</li>
+</ul>
+<p><strong>前提条件：</strong></p>
+<ul>
+<li>使用对C语言友好的操作系统(如Linux)</li>
+<li>安装<code>gcc</code>和<code>make</code>+你正在使用的库。</li>
+</ul>
+<blockquote>
+<p>注意：虚拟机是一种选择。只要不涉及图形/硬件驱动程序，Windows 10上的Ubuntu也可以正常运行。</p>
+</blockquote>
+<h3 id="Arduino-C"><a href="#Arduino-C" class="headerlink" title="Arduino C"></a>Arduino C</h3><hr>
+<ul>
+<li>在Arduino IDE中打开生成的文件</li>
+<li>编译</li>
+<li>上传至你的电路板</li>
+</ul>
+<p><strong>前提条件：</strong></p>
+<ul>
+<li>安装<a href="https://www.arduino.cc/en/Main/Software" target="_blank" rel="noopener">Arduino IDE</a></li>
+<li>安装任何你在ThingML程序中使用的Arduino库</li>
+</ul>
+<blockquote>
+<p>关于如何使用Arduino IDE和Arduino板的更多信息，请参看<a href="https://www.arduino.cc/en/Guide/Environment" target="_blank" rel="noopener">Arduino文档</a>。</p>
+</blockquote>
+<h3 id="Go"><a href="#Go" class="headerlink" title="Go"></a>Go</h3><hr>
+<ul>
+<li>在<code>thingml-gen/go/your-configuration</code>打开终端</li>
+<li>直接运行程序：<code>go run *.go</code></li>
+<li>编译可执行文件：<code>go build *.go</code></li>
+</ul>
+<p><strong>前提条件</strong></p>
+<ul>
+<li>安装适当版本的<a href="https://golang.org/doc/install" target="_blank" rel="noopener">Go</a></li>
+<li>安装<a href="https://github.com/SINTEF-9012/gosm" target="_blank" rel="noopener">ThingML使用的Go状态机库</a> <code>go get github.com/SINTEF-9012/gosm</code>。</li>
+</ul>
+<blockquote>
+<p>关于Go包结构的更多信息，请参看<a href="https://golang.org/doc/code.html" target="_blank" rel="noopener">Go文档</a></p>
+</blockquote>
+<h3 id="Teensy-C"><a href="#Teensy-C" class="headerlink" title="Teensy C"></a>Teensy C</h3><hr>
+<blockquote>
+<p>Teensy编译器已经有一段时间没有被测试了。试用时要注意一些可能的问题。</p>
+</blockquote>
+<p><strong>前提条件：</strong></p>
+<ul>
+<li>安装<a href="https://www.pjrc.com/teensy/td_download.html" target="_blank" rel="noopener">Teensyduino IDE</a></li>
+</ul>
+<p>或者</p>
+<ul>
+<li>安装<a href="https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads" target="_blank" rel="noopener">交叉编译的arm工具链</a></li>
+<li>安装<a href="https://www.pjrc.com/teensy/loader_cli.html" target="_blank" rel="noopener">teensy命令行加载器</a></li>
+</ul>
+<h2 id="从源代码编译ThingML"><a href="#从源代码编译ThingML" class="headerlink" title="从源代码编译ThingML"></a>从源代码编译ThingML</h2><blockquote>
+<p>你需要Git、Maven和合适的JDK8+。</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/TelluIoT/ThingML.git</span><br><span class="line"><span class="built_in">cd</span> ThingML</span><br><span class="line">mvn clean install</span><br><span class="line"><span class="built_in">cd</span> language</span><br><span class="line">mvn clean install</span><br></pre></td></tr></table></figure>
+
+<p>命令行接口JAR（包含所有你需要编译的ThingML文件）可以在这里找到：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> compilers/registry/target</span><br><span class="line">java -jar compilers.registry-2.0.0-SNAPSHOT-jar-with-dependencies.jar</span><br><span class="line"> --- ThingML <span class="built_in">help</span> ---</span><br><span class="line">Typical usages:</span><br><span class="line">    java -jar your-jar.jar -t &lt;tool&gt; -s &lt;<span class="built_in">source</span>&gt; [-o &lt;output-dir&gt;] [--options &lt;option&gt;][-d]</span><br><span class="line">Usage: &lt;main class&gt; [options]</span><br><span class="line">  Options:</span><br><span class="line">    --compiler, -c</span><br><span class="line">      Compiler ID (Mandatory unless --tool (-t) is used)</span><br><span class="line">    --create-dir, -d</span><br><span class="line">      Create a new directory named after the configuration <span class="keyword">for</span> the output</span><br><span class="line">      Default: <span class="literal">false</span></span><br><span class="line">    --<span class="built_in">help</span>, -h</span><br><span class="line">      Display this message.</span><br><span class="line">      Default: <span class="literal">false</span></span><br><span class="line">    --list-plugins</span><br><span class="line">      Display the list of available plugins</span><br><span class="line">      Default: <span class="literal">false</span></span><br><span class="line">    --options</span><br><span class="line">      additional options <span class="keyword">for</span> ThingML tools.</span><br><span class="line">    --output, -o</span><br><span class="line">      Optional output directory - by default current directory is used</span><br><span class="line">    --<span class="built_in">source</span>, -s</span><br><span class="line">      A thingml file to compile (should include at least one configuration)</span><br><span class="line">    --tool, -t</span><br><span class="line">      Tool ID (Mandatory unless --compiler (-c) is used)</span><br><span class="line"></span><br><span class="line">Compiler Id must belong to the following list:</span><br><span class="line"> ??     sintefboard     - Generates C++ based <span class="keyword">in</span> code <span class="keyword">for</span> Arduino.</span><br><span class="line"> ??     posixmt - Generates C code <span class="keyword">for</span> Linux or other Posix runtime environments (GCC compiler).</span><br><span class="line"> ??     java    - Generates plain Java code.</span><br><span class="line"> ??     arduino - Generates C/C++ code <span class="keyword">for</span> Arduino or other AVR microcontrollers (AVR-GCC compiler).</span><br><span class="line"> ??     UML     - Generates UML diagrams <span class="keyword">in</span> PlantUML</span><br><span class="line"> ??     browser - Generates Javascript code that can run <span class="keyword">in</span> common Web Browsers.</span><br><span class="line"> ??     nodejsMT        - Generates Multi-Process Javascript code (one nodejs process per instance) <span class="keyword">for</span> the NodeJS platform.</span><br><span class="line"> ??     nodejs  - Generates Javascript code <span class="keyword">for</span> the NodeJS platform.</span><br><span class="line"> ??     posix   - Generates C/C++ code <span class="keyword">for</span> Linux or other Posix runtime environments (GCC compiler).</span><br><span class="line"> ??     debugGUI        - Generates html/js mock-up <span class="keyword">for</span> other a ThingML external connector</span><br><span class="line"></span><br><span class="line">Tool Id must belong to the following list:</span><br><span class="line"> ??     testconfigurationgen    - Generates <span class="built_in">test</span> configuration <span class="keyword">for</span> things annnotated with @<span class="built_in">test</span> <span class="string">"input # output"</span>.</span><br></pre></td></tr></table></figure>
+
+<h2 id="x1F537-常见问题"><a href="#x1F537-常见问题" class="headerlink" title="&#x1F537; 常见问题"></a>&#x1F537; 常见问题</h2><h3 id="x1F539-ThingML代码可以运行在什么地方？"><a href="#x1F539-ThingML代码可以运行在什么地方？" class="headerlink" title="&#x1F539; ThingML代码可以运行在什么地方？"></a>&#x1F539; ThingML代码可以运行在什么地方？</h3><p><em>没有地方</em> ！或者从微控制器到云的几乎<em>任何地方</em> ！</p>
+<p>ThingML文件<em>本身</em>是一个响应式系统的结构（组件）和行为（状态机）的设计规范。它不能被直接执行。</p>
+<p>然而，ThingML文件可以被编译（或转换）为Java/JavaScript/C/Arduino源代码，而这些代码又可以平台上被编译和执行。从ThingML生成的代码已经在大量的平台上成功执行：PC Windows/Linux，Raspberry Pi 1、2和3，Intel Edison，Arduino Uno/Mega/Yun/Mini，ESP8266/ESP32，Trinket，Teensy，可能还有其他平台。</p>
+<h3 id="x1F539-如何用ThingML表示这个-或者那个-？"><a href="#x1F539-如何用ThingML表示这个-或者那个-？" class="headerlink" title="&#x1F539; 如何用ThingML表示这个 或者那个 ？"></a>&#x1F539; 如何用ThingML表示<em>这个</em> 或者<em>那个</em> ？</h3><p>一套教程可供选择<a href="https://github.com/HEADS-project/training/tree/master/1.ThingML_Basics" target="_blank" rel="noopener">在这里</a>。这些教程描述了ThingML最常见的功能。此外，<a href="testing/src/test/resources/tests/General">一套广泛的测试</a>描述了几乎所有可用的概念。如果你想知道如何表达某些东西，可以看一下那里。如果这些信息还不够，请看下面。</p>
+<h3 id="x1F539-ThingML是如何被形式化的？"><a href="#x1F539-ThingML是如何被形式化的？" class="headerlink" title="&#x1F539; ThingML是如何被形式化的？"></a>&#x1F539; ThingML是如何被形式化的？</h3><p>ThingML语言被形式化为一个基于EMF的元模型。文本语法被形式化为<a href="https://github.com/TelluIoT/ThingML/language/thingml/src/org/thingml/xtext/ThingML.xtext" target="_blank" rel="noopener">XText语法</a>。</p>
+<h3 id="x1F539-所有这些代码都很好，但我需要一些科学解释…-x1F4DA"><a href="#x1F539-所有这些代码都很好，但我需要一些科学解释…-x1F4DA" class="headerlink" title="&#x1F539; 所有这些代码都很好，但我需要一些科学解释… &#x1F4DA;"></a>&#x1F539; 所有这些代码都很好，但我需要一些科学解释… &#x1F4DA;</h3><p>ThingML得到了一系列科学出版物的支持（PDF文件可以很容易地在例如谷歌学术上找到）：</p>
+<ul>
+<li><strong>Model-Based Software Engineering to Tame the IoT Jungle</strong><br>Brice Morin, Nicolas Harrand and Franck Fleurey<br>In <em>IEEE Software, Special Issue on Internet of Things</em>, 2017.</li>
+<li><strong>ThingML, A Language and Code Generation Framework for Heterogeneous Targets</strong><br>N. Harrand, F. Fleurey, B. Morin and K.E. Husa<br>In <em>MODELS’16: ACM/IEEE 19th International Conference on Model Driven Engineering Languages and Systems. Practice and Innovation track</em>. St Malo, France, October 2-7, 2016</li>
+<li><strong>MDE to Manage Communications with and between Resource-Constrained Systems</strong><br>F. Fleurey, B. Morin, A. Solberg and O. Barais.<br>In <em>MODELS’11: ACM/IEEE 14th International Conference on Model Driven Engineering Languages and Systems</em>. Wellington, New Zealand, October 2011.</li>
+</ul>
+<p>ThingML也可以与其他方法一起使用：</p>
+<ul>
+<li><strong>Agile Development of Home Automation System with ThingML</strong><br>A. Vasilevskiy, B. Morin, Ø. Haugen and P. Evensen.<br>In <em>INDIN’16: 14th IEEE International Conference on Industrial Informatics</em>. Poitiers, France, July 18-21, 2016</li>
+<li><strong>A Generative Middleware for Heterogeneous and Distributed Services</strong><br>B. Morin, F. Fleurey, K.E. Husa, and O. Barais.<br>In <em>CBSE’16: 19th International ACM Sigsoft Symposium on Component-Based Software Engineering</em>. Venice, Italy, April 5-8, 2016</li>
+</ul>
+<h3 id="x1F539-如何将ThingML嵌入到我的工具链中？"><a href="#x1F539-如何将ThingML嵌入到我的工具链中？" class="headerlink" title="&#x1F539; 如何将ThingML嵌入到我的工具链中？"></a>&#x1F539; 如何将ThingML嵌入到我的工具链中？</h3><blockquote>
+<p>这一点目前并不奏效。正在等待问题#241的解决方案</p>
+</blockquote>
+<p>在你的classpath中嵌入本文之前描述的命令行接口JAR。</p>
+<p>你也可以将ThingML作为Maven的依赖项纳入你的项目中：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.thingml<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>compilers.registry<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.0.0-SNAPSHOT<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">repository</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">id</span>&gt;</span>thingml-snapshot<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>thingml-snapshot<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://maven.thingml.org/thingml-snapshot/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">repository</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">repository</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">id</span>&gt;</span>thingml-release<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>thingml-release<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://maven.thingml.org/thingml-release/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">repository</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="x1F539-ThingML生成的Java-JS-C-Arduino代码并不完全符合我的需求"><a href="#x1F539-ThingML生成的Java-JS-C-Arduino代码并不完全符合我的需求" class="headerlink" title="&#x1F539; ThingML生成的Java/JS/C/Arduino代码并不完全符合我的需求"></a>&#x1F539; ThingML生成的Java/JS/C/Arduino代码并不完全符合我的需求</h3><p>编译器不是单一的对象，而是围绕<a href="https://github.com/TelluIoT/ThingML/compilers/README.md" target="_blank" rel="noopener">ThingML代码生成框架</a>中定义的一组扩展点以模块化的方式实现。</p>
+<h3 id="x1F539-为什么我不能生成Python-Lua-Ruby-其他各种语言-？"><a href="#x1F539-为什么我不能生成Python-Lua-Ruby-其他各种语言-？" class="headerlink" title="&#x1F539; 为什么我不能生成Python/Lua/Ruby/其他各种语言 ？"></a>&#x1F539; 为什么我不能生成Python/Lua/Ruby/<em>其他各种语言</em> ？</h3><p>好吧，这取决于你是否为默认不支持的任何语言实现一个编译器。你还在等什么呢？</p>
+<h3 id="x1F539-我怎样才能以编程方式处理ThingML模型？"><a href="#x1F539-我怎样才能以编程方式处理ThingML模型？" class="headerlink" title="&#x1F539; 我怎样才能以编程方式处理ThingML模型？"></a>&#x1F539; 我怎样才能以编程方式处理ThingML模型？</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">File myFile = <span class="keyword">new</span> File(<span class="string">"source.thingml"</span>);</span><br><span class="line">ThingMLModel myModel = ThingMLCompiler.loadModel(myFile);</span><br><span class="line"><span class="comment">//Do something</span></span><br><span class="line">ThingMLCompiler.saveAsThingML(myModel, <span class="string">"target.thingml"</span>);</span><br><span class="line"><span class="comment">//or</span></span><br><span class="line">ThingMLCompiler.saveAsXMI(myModel, <span class="string">"target.xmi"</span>);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>建议1：确保你对ThingML元模型有良好的理解</p>
+</blockquote>
+<blockquote>
+<p>建议2：看看<a href="https://github.com/TelluIoT/ThingML/language/thingml/src/org/thingml/xtext/helpers" target="_blank" rel="noopener">帮助函数</a>，它们简化了一些典型的处理。</p>
+</blockquote>
+<blockquote>
+<p>以这种方式保存的模型将在一个大文件中包含原始文件所涉及的所有导入文件。</p>
+</blockquote>
+<blockquote>
+<p>由于我们迁移到了XText，这个功能目前可能被破坏了。</p>
+</blockquote>
+<h2 id="x1F537-更多"><a href="#x1F537-更多" class="headerlink" title="&#x1F537; 更多"></a>&#x1F537; 更多</h2><p><img src="https://opensource.org/files/osi_keyhole_100X100_90ppi.png" alt="ThingML是在符合OSI标准的Apache 2.0许可下发布的" title="ThingML是在符合OSI标准的Apache 2.0许可下发布的"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/thingML/" rel="tag"># thingML</a>
+              <a href="/tags/%E7%89%A9%E8%81%94%E7%BD%91/" rel="tag"># 物联网</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/10/05/synchronized-%E9%94%81%E8%86%A8%E8%83%80/" rel="prev" title="synchronized 锁膨胀">
+      <i class="fa fa-chevron-left"></i> synchronized 锁膨胀
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装ThingML"><span class="nav-number">1.</span> <span class="nav-text">安装ThingML</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#版本和发布"><span class="nav-number">1.1.</span> <span class="nav-text">版本和发布</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ThingML命令行编译器"><span class="nav-number">1.2.</span> <span class="nav-text">ThingML命令行编译器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ThingML基于Eclipse的IDE"><span class="nav-number">1.3.</span> <span class="nav-text">ThingML基于Eclipse的IDE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于Docker的发布"><span class="nav-number">1.4.</span> <span class="nav-text">基于Docker的发布</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ThingML程序示例"><span class="nav-number">2.</span> <span class="nav-text">ThingML程序示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编译ThingML生成的代码"><span class="nav-number">3.</span> <span class="nav-text">编译ThingML生成的代码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JAVA-Maven"><span class="nav-number">3.1.</span> <span class="nav-text">JAVA &#x2F; Maven</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络浏览器的javascript"><span class="nav-number">3.2.</span> <span class="nav-text">网络浏览器的javascript</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Node-JS的Javascript"><span class="nav-number">3.3.</span> <span class="nav-text">Node.JS的Javascript</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可视化UML图（PlantUML）"><span class="nav-number">3.4.</span> <span class="nav-text">可视化UML图（PlantUML）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Posix-C"><span class="nav-number">3.5.</span> <span class="nav-text">Posix C</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Arduino-C"><span class="nav-number">3.6.</span> <span class="nav-text">Arduino C</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Go"><span class="nav-number">3.7.</span> <span class="nav-text">Go</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Teensy-C"><span class="nav-number">3.8.</span> <span class="nav-text">Teensy C</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#从源代码编译ThingML"><span class="nav-number">4.</span> <span class="nav-text">从源代码编译ThingML</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#x1F537-常见问题"><span class="nav-number">5.</span> <span class="nav-text">&amp;#x1F537; 常见问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#x1F539-ThingML代码可以运行在什么地方？"><span class="nav-number">5.1.</span> <span class="nav-text">&amp;#x1F539; ThingML代码可以运行在什么地方？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#x1F539-如何用ThingML表示这个-或者那个-？"><span class="nav-number">5.2.</span> <span class="nav-text">&amp;#x1F539; 如何用ThingML表示这个 或者那个 ？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#x1F539-ThingML是如何被形式化的？"><span class="nav-number">5.3.</span> <span class="nav-text">&amp;#x1F539; ThingML是如何被形式化的？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#x1F539-所有这些代码都很好，但我需要一些科学解释…-x1F4DA"><span class="nav-number">5.4.</span> <span class="nav-text">&amp;#x1F539; 所有这些代码都很好，但我需要一些科学解释… &amp;#x1F4DA;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#x1F539-如何将ThingML嵌入到我的工具链中？"><span class="nav-number">5.5.</span> <span class="nav-text">&amp;#x1F539; 如何将ThingML嵌入到我的工具链中？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#x1F539-ThingML生成的Java-JS-C-Arduino代码并不完全符合我的需求"><span class="nav-number">5.6.</span> <span class="nav-text">&amp;#x1F539; ThingML生成的Java&#x2F;JS&#x2F;C&#x2F;Arduino代码并不完全符合我的需求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#x1F539-为什么我不能生成Python-Lua-Ruby-其他各种语言-？"><span class="nav-number">5.7.</span> <span class="nav-text">&amp;#x1F539; 为什么我不能生成Python&#x2F;Lua&#x2F;Ruby&#x2F;其他各种语言 ？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#x1F539-我怎样才能以编程方式处理ThingML模型？"><span class="nav-number">5.8.</span> <span class="nav-text">&amp;#x1F539; 我怎样才能以编程方式处理ThingML模型？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#x1F537-更多"><span class="nav-number">6.</span> <span class="nav-text">&amp;#x1F537; 更多</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">qhybupt</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">qhybupt</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
